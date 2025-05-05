@@ -1,5 +1,6 @@
 # ARADI Block Cipher (C Implementation)
 
+
 Este projeto contém uma implementação em C da cifra de blocos **ARADI**, baseada no material da disciplina MC938 — Criptografia e Segurança de Dados (UNICAMP).
 
 A implementação atual **corresponde até o slide 18** do material de referência, ou seja, **não inclui as otimizações por shuffle bit-level**.
