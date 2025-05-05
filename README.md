@@ -5,23 +5,23 @@ Este projeto contém uma implementação em C da cifra de blocos **ARADI**, base
 A implementação atual **corresponde até o slide 18** do material de referência, ou seja, **não inclui as otimizações por shuffle bit-level**.
 
 ## 📁 Estrutura
-├── include/
-│ ├── aradi.h
-│ ├── keyschedule.h
-│ ├── linear_maps.h
-│ ├── sbox.h
-│ ├── tables.h
-│ └── utils.h
-├── src/
-│ ├── aradi.c
-│ ├── keyschedule.c
-│ ├── linear_maps.c
-│ ├── sbox.c
-│ ├── tables.c
-│ └── utils.c
-├── test/
-│ ├── test_utils.c
-│ └── test_aradi.c
+├── include/  
+│ ├── aradi.h  
+│ ├── keyschedule.h  
+│ ├── linear_maps.h  
+│ ├── sbox.h  
+│ ├── tables.h  
+│ └── utils.h  
+├── src/  
+│ ├── aradi.c  
+│ ├── keyschedule.c  
+│ ├── linear_maps.c  
+│ ├── sbox.c  
+│ ├── tables.c  
+│ └── utils.c  
+├── test/  
+│ ├── test_utils.c  
+│ └── test_aradi.c  
 
 ## 🧪 Testes
 
