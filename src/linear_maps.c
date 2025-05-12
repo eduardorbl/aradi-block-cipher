@@ -27,3 +27,38 @@ uint32_t lm_new(const uint8_t a[4], const uint8_t b[4], const uint8_t d[4], uint
 
     return join_u16(new_u, new_l);
 }
+
+
+uint32_t lm_s_nsa(const uint8_t a[4], const uint8_t b[4], const uint8_t c[4], uint8_t j, uint32_t z) {
+    uint32_t u = z & 0xAAAAAAAA;
+    uint32_t l = z & 0x55555555;
+
+    u = rotl32(u, b[j]);
+    l = rotl32(l, c[j]);
+    uint32_t t = rotl32(z, a[j]);
+
+    z ^= u;
+    z ^= l;
+    z ^= t;
+
+    return z;
+}
+
+uint32_t lm_s_new (const uint8_t a[4], const uint8_t b[4], const uint8_t c[4], uint8_t j, uint32_t z) {
+    uint32_t t = rotl32(z, c[j]);
+    t ^= z;
+    uint32_t u = rotl32(t, a[j]);
+    uint32_t l = rotl32(t, b[j]);
+    z ^= l^((u^l)&0xAAAAAAAA);
+
+    return z;
+
+}
+
+void l_s_new(const uint8_t a[4], const uint8_t b[4], const uint8_t c[4], uint8_t j, uint32_t *U, uint32_t *L) {
+    uint32_t T = rotl32(*L, c[j]);
+    T ^= *U;
+
+    *U ^= rotl32(T, a[j]);
+    *L ^= rotl32(T, b[j]);
+}
