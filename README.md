@@ -20,8 +20,8 @@ A implementação atual **correspondente ao material de referência**, ou seja, 
 │ ├── tables.c  
 │ └── utils.c  
 ├── test/  
-│ ├── test_aradi.c
-│ ├── aradi_test_from_csv.c
+│ ├── test_aradi.c   
+│ ├── aradi_test_from_csv.c   
 │ ├── test_utils.c  
 │ └── tests_aradi_encrypt-decrypt.c
 
