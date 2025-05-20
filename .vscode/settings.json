@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "linear_maps.h": "c"
+        "linear_maps.h": "c",
+        "sbox.h": "c",
+        "keyschedule.h": "c"
     }
 }

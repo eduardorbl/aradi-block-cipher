@@ -1,11 +1,6 @@
 #include "utils.h"
 #include <stdint.h>
 
-typedef struct {
-    uint32_t x;
-    uint32_t y;
-} u32pair_t;
-
 uint16_t rotl16(uint16_t x, uint8_t n) {
     n %= 16;
     return ((x << n) | (x >> (16 - n))) & 0xFFFF;
@@ -58,9 +53,9 @@ uint32_t unshuffle(uint32_t z) {
 }
 
 uint32_t swap_two_bits(uint32_t x) {
-    uint32_t mask = (1 << 32) - 1;
+    uint32_t mask = 0xFFFFFFFF;
     uint32_t t = (x << 1) & mask;
-    uint32_t sx = t ^ ((t ^ (x >> 1)) & mask);
+    uint32_t sx = (t ^ (t ^ (x >> 1))) & 0x55555555;
     return sx;
 }
 
@@ -71,10 +66,10 @@ u32pair_t m13(uint32_t x, uint32_t y) {
     uint32_t s = ((y << 2) | (sy >> 30)) & 0xFFFFFFFF;  // rot_esq_2(y)
     uint32_t t = ((x << 6) | (sx >> 26)) & 0xFFFFFFFF;  // rot_esq_6(x)
 
-    uint32_t y_out = s ^ x;
-    uint32_t x_out = y_out ^ t;
+    y = s ^ x;
+    x = y ^ t;
 
-    return (u32pair_t){x_out, y_out};
+    return (u32pair_t){x, y};
 }
 
 u32pair_t m928(uint32_t x, uint32_t y) {
@@ -84,8 +79,8 @@ u32pair_t m928(uint32_t x, uint32_t y) {
     uint32_t s = ((y << 18) | (sy >> 14)) & 0xFFFFFFFF; // rot_esq_18(y)
     uint32_t t = ((sx << 24) | (x >> 8)) & 0xFFFFFFFF;  // rot_dir_4(x)
 
-    uint32_t y_out = s ^ x;
-    uint32_t x_out = y_out ^ t;
+    y = s ^ x;
+    x = y ^ t;
 
-    return (u32pair_t){x_out, y_out};
+    return (u32pair_t){x, y};
 }

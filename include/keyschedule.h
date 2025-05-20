@@ -5,4 +5,6 @@
 
 void derive_subkeys(const uint32_t k[8], uint32_t rk[17][4]);
 
+void subkeys_shuffle(const uint32_t k[8], uint32_t rk[17][4]);
+
 #endif // KEYSCHEDULE_H
