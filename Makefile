@@ -20,4 +20,8 @@ $(TARGET): $(OBJ) $(TEST)
 clean:
 	rm -f $(TARGET) src/*.o
 
+# Executar o teste
+run: $(TARGET)
+	./$(TARGET)
+
 .PHONY: all clean
