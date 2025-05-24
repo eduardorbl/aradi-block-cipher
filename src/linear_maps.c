@@ -30,8 +30,8 @@ uint32_t lm_new(const uint8_t a[4], const uint8_t b[4], const uint8_t d[4], uint
 
 
 uint32_t lm_s_nsa(const uint8_t a[4], const uint8_t b[4], const uint8_t c[4], uint8_t j, uint32_t z) {
-    uint32_t u = z & 0xAAAAAAAA;
-    uint32_t l = z & 0x55555555;
+    uint32_t u = z & 0xAAAAAAAA; // 0xAAAAAAAA = 10101010101010101010101010101010 in binary
+    uint32_t l = z & 0x55555555; // 0x55555555 = 01010101010101010101010101010101 in binary
 
     u = rotl32(u, b[j]);
     l = rotl32(l, c[j]);

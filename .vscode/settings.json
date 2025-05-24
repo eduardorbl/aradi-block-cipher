@@ -2,6 +2,7 @@
     "files.associations": {
         "linear_maps.h": "c",
         "sbox.h": "c",
-        "keyschedule.h": "c"
+        "keyschedule.h": "c",
+        "stdlib.h": "c"
     }
 }

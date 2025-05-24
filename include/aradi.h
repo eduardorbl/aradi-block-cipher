@@ -17,4 +17,10 @@ void aradi_encrypt_shuffle(const uint32_t state[4], const uint32_t key[8], uint3
 // Decrypts a 128-bit block using ARADI with bit shuffling
 void aradi_decrypt_shuffle(const uint32_t ciphertext[4], const uint32_t key[8], uint32_t output[4]);
 
+// Encrypts a 128-bit block using ARADI with bit shuffling for 2 blocks
+void aradi_encrypt_shuffle_2blocks(const uint32_t state[4], const uint32_t key[8], uint32_t output[4]);
+
+// Decrypts a 128-bit block using ARADI with bit shuffling for 2 blocks
+void aradi_decrypt_shuffle_2blocks(const uint32_t ciphertext[4], const uint32_t key[8], uint32_t output[4]);
+
 #endif // ARADI_H
