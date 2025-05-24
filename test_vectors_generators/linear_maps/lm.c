@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "linear_maps.h"
 #include "tables.h"
 int main() {
