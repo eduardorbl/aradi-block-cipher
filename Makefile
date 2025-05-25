@@ -18,12 +18,7 @@ $(TARGET): $(OBJ) $(TEST)
 
 # Limpeza
 clean:
-	rm -f $(TARGET) src/*.o test_vectors_generators/aradi/*.o \
-	test_vectors_generators/keyschedule/*.o test_vectors_generators/linear_maps/*.o \
-	test_vectors_generators/sbox/*.o test_vectors_generators/utils/*.o \
-	test_vectors_generators/aradi/*.o test_vectors_generators/keyschedule/*.o \
-	test_vectors_generators/linear_maps/*.o test_vectors_generators/sbox/*.o \
-	test_vectors_generators/utils/*.o
+	find . -type f \( -name '*.o' -o -perm +111 \) -exec rm -f {} +
 
 # Executar o teste
 run: $(TARGET)
@@ -67,19 +62,37 @@ GENERATORS = \
 GENERATOR_OBJS = $(GENERATORS:.c=)
 
 # Regra para compilar todos os geradores
+BIN_DIR = bin
+
 generate_vectors:
-	@echo "Are you sure you want to generate all test vectors? [y/N]"
+	@echo "\033[31mAre you sure you want to generate all test vectors? (if you do it you will delete all actual vectors) [y/N]\033[0m"
 	@read ans; \
 	if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then \
+		echo "Criando diretórios de test_vectors..."; \
+		mkdir -p test_vectors/aradi \
+		         test_vectors/keyschedule \
+		         test_vectors/linear_maps \
+		         test_vectors/sbox \
+		         test_vectors/utils; \
+		mkdir -p $(BIN_DIR); \
 		for gen in $(GENERATORS); do \
-			bin=$${gen%.c}; \
+			file=$$(basename $$gen .c); \
 			echo "Compiling $$gen..."; \
-			$(CC) $(CFLAGS) $$gen $(SRC) -o $$bin; \
-			echo "Running $$bin..."; \
-			$$bin; \
+			$(CC) $(CFLAGS) $$gen $(SRC) -o $(BIN_DIR)/$$file; \
+		done; \
+		for gen in $(GENERATORS); do \
+			file=$$(basename $$gen .c); \
+			echo "Running $(BIN_DIR)/$$file..."; \
+			./$(BIN_DIR)/$$file; \
 		done; \
 	else \
 		echo "Aborted."; \
 	fi
+	@echo "All test vectors generated."
 
 .PHONY: all clean run generate_vectors
+
+# Regra para compilar o .csv de benchmarks
+benchmarks:
+	clang -Wall -Wextra -Iinclude benchmarks/bench_aradi.c src/*.c -o benchmarks/bench_aradi
+	./benchmarks/bench_aradi > benchmarks/bench_results.csv

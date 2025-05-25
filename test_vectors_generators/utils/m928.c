@@ -4,7 +4,7 @@
 #include "utils.h"
 
 int main() {
-    FILE *fp = fopen("../../test_vectors/utils/m928_vectors.csv", "w");
+    FILE *fp = fopen("test_vectors/utils/m928_vectors.csv", "w");
     if (!fp) return 1;
 
     fprintf(fp, "x,y,out_x,out_y\n");

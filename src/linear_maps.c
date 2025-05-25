@@ -45,6 +45,7 @@ uint32_t lm_s_nsa(const uint8_t a[4], const uint8_t b[4], const uint8_t c[4], ui
 }
 
 uint32_t lm_s_new (const uint8_t a[4], const uint8_t b[4], const uint8_t c[4], uint8_t j, uint32_t z) {
+    // a = [22, 20, 18, 16]; b =[15, 17, 7, 17]; c = [7 ,3 ,11 ,31]
     uint32_t t = rotl32(z, c[j]);
    
     t ^= z;

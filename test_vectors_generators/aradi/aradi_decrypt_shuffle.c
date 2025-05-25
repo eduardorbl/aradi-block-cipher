@@ -4,7 +4,7 @@
 #include "aradi.h"
 
 int main() {
-    FILE *fp = fopen("../../test_vectors/aradi/aradi_decrypt_shuffle_vectors.csv", "w");
+    FILE *fp = fopen("test_vectors/aradi/aradi_decrypt_shuffle_vectors.csv", "w");
     if (!fp) return 1;
 
     fprintf(fp, "in0,in1,in2,in3,k0,k1,k2,k3,k4,k5,k6,k7,out0,out1,out2,out3\n");

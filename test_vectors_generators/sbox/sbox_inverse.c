@@ -4,7 +4,7 @@
 #include "sbox.h"
 
 int main() {
-    FILE *fp = fopen("../../test_vectors/sbox/sbox_inverse_vectors.csv", "w");
+    FILE *fp = fopen("test_vectors/sbox/sbox_inverse_vectors.csv", "w");
     if (!fp) return 1;
 
     fprintf(fp, "w_in,x_in,y_in,z_in,w_out,x_out,y_out,z_out\n");

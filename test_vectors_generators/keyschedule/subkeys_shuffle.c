@@ -4,7 +4,7 @@
 #include "keyschedule.h"
 
 int main() {
-    FILE *fp = fopen("../../test_vectors/keyschedule/subkeys_shuffle_vectors.csv", "w");
+    FILE *fp = fopen("test_vectors/keyschedule/subkeys_shuffle_vectors.csv", "w");
     if (!fp) return 1;
 
     fprintf(fp, "k0,k1,k2,k3,k4,k5,k6,k7");

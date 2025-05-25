@@ -4,7 +4,7 @@
 #include "utils.h"
 
 int main() {
-    FILE *fp = fopen("../../test_vectors/utils/split_u32_vectors.csv", "w");
+    FILE *fp = fopen("test_vectors/utils/split_u32_vectors.csv", "w");
     if (!fp) return 1;
 
     fprintf(fp, "input,high,low\n");

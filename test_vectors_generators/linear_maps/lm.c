@@ -4,7 +4,7 @@
 #include "linear_maps.h"
 #include "tables.h"
 int main() {
-    FILE *fp = fopen("../../test_vectors/linear_maps/lm_vectors.csv", "w");
+    FILE *fp = fopen("test_vectors/linear_maps/lm_vectors.csv", "w");
     if (!fp) return 1;
 
     fprintf(fp, "z_in,j,z_out\n");
