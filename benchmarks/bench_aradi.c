@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
+#include <libgen.h>
 #include "aradi.h"
 
 #define MAX_TRIALS 100000
@@ -34,7 +35,10 @@ int main() {
     size_t sizes[] = {100, 500, 1000, 5000, 10000, 20000, 50000, 100000};
     size_t num_sizes = sizeof(sizes) / sizeof(sizes[0]);
 
-    FILE *fp = fopen("bench_results.csv", "w");
+    char path[1024];
+    snprintf(path, sizeof(path), "%s/bench_results.csv", dirname(__FILE__));
+
+    FILE *fp = fopen(path, "w");
     if (!fp) {
         perror("fopen");
         return 1;
