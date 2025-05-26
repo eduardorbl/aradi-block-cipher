@@ -90,9 +90,14 @@ generate_vectors:
 	fi
 	@echo "All test vectors generated."
 
-.PHONY: all clean run generate_vectors
-
 # Regra para compilar o .csv de benchmarks
+# Flags that make No-Shuffle better: clang -Wall -Wextra -Iinclude -O3 -march=native -flto benchmarks/bench_aradi.c src/*.c -o benchmarks/bench_aradi
 benchmarks:
 	clang -Wall -Wextra -Iinclude benchmarks/bench_aradi.c src/*.c -o benchmarks/bench_aradi
 	./benchmarks/bench_aradi > benchmarks/bench_results.csv
+	@echo "Benchmarks generated in benchmarks/bench_results.csv"
+	@echo "Running Python script to plot benchmarks..."
+	. benchmarks/venv/bin/activate && python3 benchmarks/plot_bench.py && deactivate
+	@echo "Benchmarks plotted in benchmarks/bench_results.png"
+
+.PHONY: all clean run generate_vectors benchmarks
