@@ -6,28 +6,28 @@
 #include "keyschedule.h"
 #include "utils.h"
 
-// Converte string hexa para uint32_t
+// Converts hexadecimal string to uint32_t
 uint32_t hex_to_u32(const char *hex) {
     uint32_t val;
     sscanf(hex, "%x", &val);
     return val;
 }
 
-// Verifica igualdade entre dois blocos
+// Checks equality between two blocks
 int block_equals(const uint32_t a[4], const uint32_t b[4]) {
     return memcmp(a, b, sizeof(uint32_t) * 4) == 0;
 }
 
-// Testa cifragem com base no CSV novo (pt + key + ct)
+// Tests encryption based on the new CSV (pt + key + ct)
 void test_from_csv(const char *filename) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
-        perror("Erro ao abrir CSV");
+        perror("Error opening CSV");
         return;
     }
 
     char line[1024];
-    fgets(line, sizeof(line), fp); // pula header
+    fgets(line, sizeof(line), fp); // skip header
 
     int block_id = 0, passed = 0, total = 0;
 
@@ -41,7 +41,7 @@ void test_from_csv(const char *filename) {
         }
 
         if (i != 16) {
-            printf("❌ Linha inválida com %d colunas\n", i);
+            printf("❌ Invalid line with %d columns\n", i);
             continue;
         }
 
@@ -55,24 +55,24 @@ void test_from_csv(const char *filename) {
 
         total++;
         if (block_equals(encrypted, expected)) {
-            printf("✅ Bloco %d passou.\n", block_id);
+            printf("✅ Block %d passed.\n", block_id);
             passed++;
         } else {
-            printf("❌ Bloco %d falhou.\n", block_id);
-            printf("  Esperado: ");
+            printf("❌ Block %d failed.\n", block_id);
+            printf("  Expected: ");
             for (int j = 0; j < 4; j++) printf("%08x ", expected[j]);
-            printf("\n  Obtido:   ");
+            printf("\n  Obtained: ");
             for (int j = 0; j < 4; j++) printf("%08x ", encrypted[j]);
             printf("\n");
         }
 
-        // Decifragem opcional:
+        // Optional decryption:
         aradi_decrypt_shuffle(encrypted, key, decrypted);
         if (!block_equals(pt, decrypted)) {
-            printf("  ❌ Decifragem falhou no bloco %d\n", block_id);
+            printf("  ❌ Decryption failed on block %d\n", block_id);
             printf("    Original: ");
             for (int j = 0; j < 4; j++) printf("%08x ", pt[j]);
-            printf("\n    Decifrado: ");
+            printf("\n    Decrypted: ");
             for (int j = 0; j < 4; j++) printf("%08x ", decrypted[j]);
             printf("\n");
         }
@@ -81,7 +81,7 @@ void test_from_csv(const char *filename) {
     }
 
     fclose(fp);
-    printf("\nResumo: %d/%d blocos cifrados corretamente.\n", passed, total);
+    printf("\nSummary: %d/%d blocks encrypted correctly.\n", passed, total);
 }
 
 int main() {

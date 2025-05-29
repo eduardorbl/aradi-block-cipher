@@ -79,15 +79,13 @@ void aradi_decrypt(const uint32_t ciphertext[4], const uint32_t key[8], uint32_t
 
 void aradi_encrypt_shuffle(const uint32_t state[4], const uint32_t key[8], uint32_t output[4]) {
     uint32_t rk[17][4];
-    subkeys_shuffle(key, rk);  // generation of subkeys with shuffle
+    subkeys_shuffle(key, rk); 
 
-    // initial shuffle
     uint32_t w = shuffle(state[0]);
     uint32_t x = shuffle(state[1]);
     uint32_t y = shuffle(state[2]);
     uint32_t z = shuffle(state[3]);
 
-    // 16 rounds
     for (int i = 0; i < 16; ++i) {
         w ^= rk[i][0];
         x ^= rk[i][1];
@@ -125,39 +123,32 @@ void aradi_decrypt_shuffle(const uint32_t ciphertext[4], const uint32_t key[8], 
     uint32_t rk[17][4];
     subkeys_shuffle(key, rk);  // generation of subkeys with shuffle
 
-    // initial shuffle
     uint32_t w = shuffle(ciphertext[0]);
     uint32_t x = shuffle(ciphertext[1]);
     uint32_t y = shuffle(ciphertext[2]);
     uint32_t z = shuffle(ciphertext[3]);
 
-    // XOR with final round key
     w ^= rk[16][0];
     x ^= rk[16][1];
     y ^= rk[16][2];
     z ^= rk[16][3];
 
-    // reverse rounds
     for (int i = 15; i >= 0; --i) {
         int j = i % 4;
 
-        // aply linear map
         w = lm_s_new(ARADI_A_S, ARADI_B_S, ARADI_C_S, j, w);
         x = lm_s_new(ARADI_A_S, ARADI_B_S, ARADI_C_S, j, x);
         y = lm_s_new(ARADI_A_S, ARADI_B_S, ARADI_C_S, j, y);
         z = lm_s_new(ARADI_A_S, ARADI_B_S, ARADI_C_S, j, z);
 
-        // Inverse S-box
         sbox_inverse(&w, &x, &y, &z);
 
-        // XOR with round key
         w ^= rk[i][0];
         x ^= rk[i][1];
         y ^= rk[i][2];
         z ^= rk[i][3];
     }
 
-    // final unshuffle
     w = unshuffle(w);
     x = unshuffle(x);
     y = unshuffle(y);
@@ -171,7 +162,7 @@ void aradi_decrypt_shuffle(const uint32_t ciphertext[4], const uint32_t key[8], 
 
 void aradi_encrypt_shuffle_2blocks(const uint32_t state[4], const uint32_t key[8], uint32_t output[4]) {
     uint32_t rk[17][4];
-    subkeys_shuffle(key, rk);  // Geração de subchaves com shuffle
+    subkeys_shuffle(key, rk); 
 
     // w = shuffle(u0 || u1); x = shuffle(l0 || l1);
     // y = shuffle(u2 || u3); z = shuffle(l2 || l3);
@@ -180,7 +171,6 @@ void aradi_encrypt_shuffle_2blocks(const uint32_t state[4], const uint32_t key[8
     uint32_t y = shuffle((state[2] & 0xFFFF0000) | ((state[3] >> 16) & 0xFFFF));
     uint32_t z = shuffle(((state[2] << 16) & 0xFFFF0000) | (state[3] & 0xFFFF));
     
-    // 16 rounds
     for (int i = 0; i < 16; ++i) {
         w ^= rk[i][0];
         x ^= rk[i][1];
@@ -190,7 +180,6 @@ void aradi_encrypt_shuffle_2blocks(const uint32_t state[4], const uint32_t key[8
         sbox_layer(&w, &x, &y, &z);  // S-box
 
         int j = i % 4;
-        // Aplicar linear map para 2 blocos: w,x e y,z
         l_s_new(ARADI_A_S_2, ARADI_B_S_2, ARADI_C_S_2, j, &w, &x);
         l_s_new(ARADI_A_S_2, ARADI_B_S_2, ARADI_C_S_2, j, &y, &z);
     }
@@ -215,45 +204,37 @@ void aradi_encrypt_shuffle_2blocks(const uint32_t state[4], const uint32_t key[8
 
 void aradi_decrypt_shuffle_2blocks(const uint32_t state[4], const uint32_t key[8], uint32_t output[4]) {
     uint32_t rk[17][4];
-    subkeys_shuffle(key, rk);  // Geração de subchaves com shuffle
+    subkeys_shuffle(key, rk); 
 
-    // Pré-processamento: combinar as partes dos blocos com shuffle
     uint32_t w = shuffle((state[0] & 0xFFFF0000) | ((state[1] >> 16) & 0xFFFF));
     uint32_t x = shuffle(((state[0] << 16) & 0xFFFF0000) | (state[1] & 0xFFFF));
     uint32_t y = shuffle((state[2] & 0xFFFF0000) | ((state[3] >> 16) & 0xFFFF));
     uint32_t z = shuffle(((state[2] << 16) & 0xFFFF0000) | (state[3] & 0xFFFF));
 
-    // Inverso do XOR final
     w ^= rk[16][0];
     x ^= rk[16][1];
     y ^= rk[16][2];
     z ^= rk[16][3];
 
-    // Rodadas inversas: de 15 até 0
     for (int i = 15; i >= 0; --i) {
         int j = i % 4;
 
-        // Linear map inverso (mesmo l_s_new, pois é involutivo)
         l_s_new(ARADI_A_S_2, ARADI_B_S_2, ARADI_C_S_2, j, &w, &x);
         l_s_new(ARADI_A_S_2, ARADI_B_S_2, ARADI_C_S_2, j, &y, &z);
 
-        // S-box inverso
         sbox_layer(&w, &x, &y, &z);
 
-        // XOR com subchave da rodada
         w ^= rk[i][0];
         x ^= rk[i][1];
         y ^= rk[i][2];
         z ^= rk[i][3];
     }
 
-    // Pós-processamento: desfazer o shuffle
     w = unshuffle(w);
     x = unshuffle(x);
     y = unshuffle(y);
     z = unshuffle(z);
 
-    // Recombinar as partes dos blocos
     output[0] = (w & 0xFFFF0000) | ((x >> 16) & 0xFFFF);
     output[1] = ((w << 16) & 0xFFFF0000) | (x & 0xFFFF);
     output[2] = (y & 0xFFFF0000) | ((z >> 16) & 0xFFFF);
